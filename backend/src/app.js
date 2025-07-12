@@ -21,3 +21,9 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Backend server running on port ${PORT}`);
 });
+
+const connectDB = require('./utils/db');
+connectDB();
+
+const tmdbRoutes = require('./routes/tmdb');
+app.use('/api/tmdb', tmdbRoutes);
