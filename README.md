@@ -71,23 +71,48 @@ movie-recommender/
 ├── backend/
 │   ├── src/
 │   │   ├── controllers/
+│   │   │   └── movieController.js
 │   │   ├── models/
+│   │   │   ├── SearchHistory.js
+│   │   │   └── Recommendation.js
 │   │   ├── routes/
+│   │   │   ├── movieRoutes.js
+│   │   │   └── peopleRoutes.js
 │   │   ├── services/
+│   │   │   ├── tmdbService.js
+│   │   │   └── databaseService.js
 │   │   ├── utils/
+│   │   │   └── validators.js
 │   │   └── app.js
 │   ├── config/
+│   │   └── database.js
 │   ├── tests/
 │   ├── .env
 │   └── package.json
 ├── frontend/
 │   ├── public/
+│   │   ├── index.html
+│   │   └── favicon.ico
 │   ├── src/
 │   │   ├── components/
+│   │   │   ├── Header.js
+│   │   │   ├── Footer.js
+│   │   │   ├── MovieCard.js
+│   │   │   ├── MovieGrid.js
+│   │   │   ├── MovieCarousel.js
+│   │   │   ├── SearchBar.js
+│   │   │   ├── Loading.js
+│   │   │   └── ErrorBoundary.js
 │   │   ├── pages/
+│   │   │   ├── Home.js
+│   │   │   ├── Search.js
+│   │   │   └── MovieDetails.js
 │   │   ├── services/
+│   │   │   └── api.js
 │   │   ├── context/
+│   │   │   └── MovieContext.js
 │   │   ├── App.js
+│   │   ├── App.css
 │   │   └── index.js
 │   └── package.json
 ├── docs/
