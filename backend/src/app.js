@@ -1,24 +1,27 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ 
+  path: path.resolve(__dirname, '../../.env'),
+  debug: process.env.NODE_ENV === 'development' 
+});
+
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
-const connectDatabase = require('../config/database');
 
+// Debug environment variables
+console.log('🔍 Environment variables loaded:');
+console.log('TMDB_API_KEY:', process.env.TMDB_API_KEY ? 'Found ✅' : 'Missing ❌');
+console.log('PORT:', process.env.PORT || 5000);
+console.log('NODE_ENV:', process.env.NODE_ENV || 'development');
+console.log('CLIENT_URL:', process.env.CLIENT_URL || 'http://localhost:3000');
 
-// Import routes
+// Import routes - AFTER environment variables are loaded
 const movieRoutes = require('./routes/movieRoutes');
 const peopleRoutes = require('./routes/peopleRoutes');
 
 const app = express();
-
-// Connect to MongoDB (optional - comment out if not using)
-if (process.env.MONGODB_URI) {
-  connectDatabase();
-} else {
-  console.log('⚠️  MongoDB URI not provided. Running without database features.');
-}
 
 // Security middleware
 app.use(helmet());
@@ -56,7 +59,7 @@ app.get('/api/health', (req, res) => {
     message: 'Movie Recommender API is running',
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development',
-    database: process.env.MONGODB_URI ? 'connected' : 'not configured',
+    tmdbConfigured: !!process.env.TMDB_API_KEY,
     endpoints: {
       health: '/api/health',
       movies: {
@@ -125,7 +128,7 @@ app.listen(PORT, () => {
 ║  🚀 Server Status: RUNNING                                   ║
 ║  🌍 Environment:   ${(process.env.NODE_ENV || 'development').padEnd(43)}║
 ║  📡 Port:          ${PORT.toString().padEnd(43)}║
-║  💾 Database:      ${(process.env.MONGODB_URI ? 'Connected' : 'Not Configured').padEnd(43)}║
+║  🔑 TMDB API:      ${(process.env.TMDB_API_KEY ? 'Configured' : 'Missing').padEnd(43)}║
 ╠══════════════════════════════════════════════════════════════╣
 ║  📚 Available Endpoints:                                     ║
 ║                                                              ║
