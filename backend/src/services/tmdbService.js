@@ -3,8 +3,8 @@ const axios = require('axios');
 class TMDBService {
   constructor() {
     this.apiKey = process.env.TMDB_API_KEY;
-    this.baseURL = process.env.TMDB_BASE_URL || 'https://api.themoviedb.org/3';
-    this.imageBaseURL = process.env.TMDB_IMAGE_BASE_URL || 'https://image.tmdb.org/t/p/w500';
+    this.baseURL = process.env.TMDB_BASE_URL || 'https://api.themoviedb.org/';
+    this.imageBaseURL = process.env.TMDB_IMAGE_BASE_URL || 'https://image.tmdb.org/t/p/original';
     
     // Create axios instance with default config
     this.api = axios.create({
