@@ -1,10 +1,16 @@
 const express = require('express');
 const movieController = require('../controllers/movieController');
-const validators = require('../utils/validators');
+const { query } = require('express-validator');
 
 const router = express.Router();
 
-// Search people (actors, directors, etc.)
-router.get('/search', validators.searchPeople, movieController.searchPeople);
+// Validation middleware
+const validatePeopleSearch = [
+  query('q').trim().notEmpty().withMessage('Search query is required'),
+  query('page').optional().isInt({ min: 1 }).withMessage('Page must be positive integer')
+];
+
+// People routes
+router.get('/search', validatePeopleSearch, movieController.searchPeople);
 
 module.exports = router;

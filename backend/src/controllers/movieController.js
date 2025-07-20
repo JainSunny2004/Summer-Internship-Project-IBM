@@ -24,12 +24,7 @@ class MovieController {
         region 
       } = req.query;
 
-      if (!query || query.trim().length === 0) {
-        return res.status(400).json({
-          status: 'error',
-          message: 'Search query is required'
-        });
-      }
+      console.log(`🔍 Searching movies: "${query}" (page ${page})`);
 
       const filters = {
         year: year ? parseInt(year) : undefined,
@@ -61,6 +56,8 @@ class MovieController {
     try {
       const { page = 1 } = req.query;
       
+      console.log(`📈 Getting popular movies (page ${page})`);
+      
       const results = await tmdbService.getPopularMovies(parseInt(page));
       
       res.status(200).json({
@@ -81,14 +78,18 @@ class MovieController {
   // Get movie details by ID
   async getMovieDetails(req, res) {
     try {
-      const { id } = req.params;
-      
-      if (!id || isNaN(parseInt(id))) {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
         return res.status(400).json({
           status: 'error',
-          message: 'Valid movie ID is required'
+          message: 'Validation failed',
+          errors: errors.array()
         });
       }
+
+      const { id } = req.params;
+      
+      console.log(`🎬 Getting movie details for ID: ${id}`);
 
       const movie = await tmdbService.getMovieDetails(parseInt(id));
       
@@ -118,15 +119,19 @@ class MovieController {
   // Get movies by genre
   async getMoviesByGenre(req, res) {
     try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'Validation failed',
+          errors: errors.array()
+        });
+      }
+
       const { genreId } = req.params;
       const { page = 1 } = req.query;
 
-      if (!genreId || isNaN(parseInt(genreId))) {
-        return res.status(400).json({
-          status: 'error',
-          message: 'Valid genre ID is required'
-        });
-      }
+      console.log(`🎭 Getting movies by genre: ${genreId} (page ${page})`);
 
       const results = await tmdbService.getMoviesByGenre(parseInt(genreId), parseInt(page));
       
@@ -149,6 +154,8 @@ class MovieController {
   // Get all genres
   async getGenres(req, res) {
     try {
+      console.log('🏷️ Getting movie genres');
+      
       const genres = await tmdbService.getGenres();
       
       res.status(200).json({
@@ -180,6 +187,8 @@ class MovieController {
         cast,
         keywords
       } = req.query;
+
+      console.log(`🔍 Discovering movies with filters (page ${page})`);
 
       const filters = {
         sortBy,
@@ -220,15 +229,19 @@ class MovieController {
   // Get movie recommendations based on a movie ID
   async getRecommendations(req, res) {
     try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'Validation failed',
+          errors: errors.array()
+        });
+      }
+
       const { id } = req.params;
       const { page = 1 } = req.query;
 
-      if (!id || isNaN(parseInt(id))) {
-        return res.status(400).json({
-          status: 'error',
-          message: 'Valid movie ID is required'
-        });
-      }
+      console.log(`💡 Getting recommendations for movie ID: ${id}`);
 
       // Get movie details to extract genres and cast
       const movieDetails = await tmdbService.getMovieDetails(parseInt(id));
@@ -307,14 +320,18 @@ class MovieController {
   // Search for people (cast/crew)
   async searchPeople(req, res) {
     try {
-      const { q: query, page = 1 } = req.query;
-
-      if (!query || query.trim().length === 0) {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
         return res.status(400).json({
           status: 'error',
-          message: 'Search query is required'
+          message: 'Validation failed',
+          errors: errors.array()
         });
       }
+
+      const { q: query, page = 1 } = req.query;
+
+      console.log(`👥 Searching people: "${query}" (page ${page})`);
 
       const results = await tmdbService.searchPeople(query.trim(), parseInt(page));
       
